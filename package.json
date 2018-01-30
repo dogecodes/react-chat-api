@@ -1,0 +1,20 @@
+{
+  "name": "dogecodes-chat-server",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.1",
+    "mongoose": "^4.13.10",
+    "socket.io": "^2.0.4",
+    "ws": "^4.0.0"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.11"
+  }
+}
