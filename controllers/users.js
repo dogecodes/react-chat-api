@@ -51,6 +51,13 @@ function getUserById(userId) {
     countUserMessages(userId)
   ])
     .then(([user, chatsCount, messagesCount]) => {
+      if (!user) {
+        return Promise.reject({
+          success: false,
+          message: 'There is no users with this ID',
+        });
+      }
+
       return Promise.resolve({
         success: true,
         message: 'User information has been retrieved',
