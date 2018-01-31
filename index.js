@@ -1,8 +1,9 @@
 const express = require('express');
 const http = require('http');
-const SocketIOServer = require('socket.io');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const SocketIOServer = require('socket.io');
 const routes = require('./routes');
 const socketio = require('./middlewares/socketio');
 
@@ -33,6 +34,10 @@ db.once('open', () => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Allow CORS
+
+app.use(cors());
 
 // Add socket.io
 
