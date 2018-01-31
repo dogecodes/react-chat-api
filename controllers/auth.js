@@ -4,6 +4,13 @@ const { secret } = require('../config');
 
 // Sign up new user by username and password
 function signUp(username, password) {
+  if (!username || !password) {
+    return Promise.reject({
+      success: false,
+      message: 'Please, provide username and password!'
+    });
+  }
+
   return User.findOne({ username: username.toLowerCase() })
     .exec()
     .then((user) => {
@@ -42,6 +49,13 @@ function signUp(username, password) {
 
 // Login user by username and password
 function login(username, password) {
+  if (!username || !password) {
+    return Promise.reject({
+      success: false,
+      message: 'Please, provide username and password!'
+    });
+  }
+
   return User.findOne({ username: username.toLowerCase() }).exec()
     .then((user) => {
       if (!user) {
