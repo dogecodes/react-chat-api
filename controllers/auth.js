@@ -40,6 +40,7 @@ function signUp(username, password) {
         message: 'User has been created',
         token,
         user: {
+          id: savedUser._id,
           username: savedUser.username,
           profile: savedUser.profile,
         }
@@ -89,9 +90,8 @@ function login(username, password) {
         message: 'Success! You are logged in.',
         token,
         user: {
-          _id: user._id,
-          username: user.email,
-          password: user.password,
+          id: user._id,
+          username: user.username,
           profile: user.profile
         }
       });

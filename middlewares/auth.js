@@ -3,18 +3,23 @@ const { secret } = require('../config');
 
 // Checking token middleware
 function auth(req, res, next) {
-  if (req.body.token) {
-    jwt.verify(req.body.token, secret, (err, decoded) => {
-      if (err) {
-        return res.status(403).send({
-          success: false,
-          message: 'Failed to authenticate token.',
-        });
-      }
+  console.log(req.headers)
+  if (req.headers.authorization) {
+    const [prefix, token] = req.headers.authorization.split(' ');
 
-      req.decoded = decoded;
-      return next();
-    });
+    if (prefix === 'Bearer') {
+      jwt.verify(token, secret, (err, decoded) => {
+        if (err) {
+          return res.status(403).send({
+            success: false,
+            message: 'Failed to authenticate token.',
+          });
+        }
+  
+        req.decoded = decoded;
+        return next();
+      });
+    }
   } else {
     return res.status(403).send({
       success: false,
