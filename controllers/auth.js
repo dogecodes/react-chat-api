@@ -32,7 +32,7 @@ function signUp(username, password) {
       const token = jwt.sign(
         { userId: savedUser._id },
         secret,
-        { expiresIn: 86400 }
+        { expiresIn: 60 * 60 * 24 * 10 } // 10 days
       );
 
       return Promise.resolve({

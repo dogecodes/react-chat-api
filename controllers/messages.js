@@ -9,13 +9,8 @@ function sendMessage(userId, chatId, data) {
 
   return message.save()
     .then((savedMessage) => {
-      const populateQuery = data.statusMessage
-        ? { path: 'statusMessageUserId', select:'username profile' }
-        : { path: 'sender', select: 'username profile' };
-
       return Message.findOne({ _id: savedMessage._id })
-        .populate(populateQuery)
-        .populate({ path: 'chatId', select: 'creator members' })
+        .populate({ path: 'sender', select: 'username profile' })
         .exec();
     })
     .then((message) => Promise.resolve({
@@ -26,7 +21,6 @@ function sendMessage(userId, chatId, data) {
 
 function getAllMessages(chatId) {
   return Message.find({ chatId })
-    .populate({ path: 'statusMessageUserId', select:'username profile' })
     .populate({ path: 'sender', select:'username profile' })
     .sort({ createdAt: 1 })
     .exec()

@@ -3,7 +3,6 @@ const { secret } = require('../config');
 
 // Checking token middleware
 function auth(req, res, next) {
-  console.log(req.headers)
   if (req.headers.authorization) {
     const [prefix, token] = req.headers.authorization.split(' ');
 

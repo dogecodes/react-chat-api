@@ -43,11 +43,6 @@ app.use(cors());
 
 app.use(socketio(io))
 
-io.on('connection', socket => {
-  socket.send('test')
-  socket.on('message', console.log)
-});
-
 // Use routers
 
 app.use('/', routes);

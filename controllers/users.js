@@ -50,7 +50,7 @@ function getUserById(userId) {
     getUserChats(userId),
     countUserMessages(userId)
   ])
-    .then(([user, chatsCount, messagesCount]) => {
+    .then(([user, chats, messagesCount]) => {
       if (!user) {
         return Promise.reject({
           success: false,
@@ -61,7 +61,7 @@ function getUserById(userId) {
       return Promise.resolve({
         success: true,
         message: 'User information has been retrieved',
-        user: Object.assign({}, user, { chatsCount, messagesCount }),
+        user: Object.assign({}, user, { chats, messagesCount }),
       })
     })
 }

@@ -13,12 +13,7 @@ const messageSchema = new mongoose.Schema({
     ref: 'Chat'
   },
   content: String,
-  statusMessage: Boolean,
-  statusMessageUserId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    set: ignoreEmpty
-  }
+  statusMessage: Boolean
 }, { timestamps: true });
 
 module.exports = mongoose.model('Message', messageSchema);
