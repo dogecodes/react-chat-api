@@ -10,7 +10,7 @@ function sendMessage(userId, chatId, data) {
   return message.save()
     .then((savedMessage) => {
       return Message.findOne({ _id: savedMessage._id })
-        .populate({ path: 'sender', select: 'username profile' })
+        .populate({ path: 'sender', select: 'username firstName lastName' })
         .exec();
     })
     .then((message) => Promise.resolve({
@@ -21,7 +21,7 @@ function sendMessage(userId, chatId, data) {
 
 function getAllMessages(chatId) {
   return Message.find({ chatId })
-    .populate({ path: 'sender', select:'username profile' })
+    .populate({ path: 'sender', select:'username firstName lastName' })
     .sort({ createdAt: 1 })
     .exec()
     .then((messages) => Promise.resolve({

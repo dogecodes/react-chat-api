@@ -46,10 +46,6 @@ function socketio(io) {
           console.log(error);
         });
     });
-
-    socket.on('create-chat', (chat) => {
-      // create chat
-    });
   });
 
   return (req, res, next) => {

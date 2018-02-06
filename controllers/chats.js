@@ -6,8 +6,8 @@ const messagesController = require('./messages');
 
 function getAllChats() {
   return Chat.find()
-    .populate({ path: 'creator', select: 'username profile' })
-    .populate({ path: 'members', select: 'username profile' })
+    .populate({ path: 'creator', select: 'username firstName lastName' })
+    .populate({ path: 'members', select: 'username firstName lastName' })
     .lean()
     .exec()
     .then((chats) => Promise.resolve({
@@ -23,8 +23,8 @@ function getMyChats(userId) {
       { members: userId }
     ]
   })
-    .populate({ path: 'creator', select: 'username profile' })
-    .populate({ path: 'members', select: 'username profile' })
+    .populate({ path: 'creator', select: 'username firstName lastName' })
+    .populate({ path: 'members', select: 'username firstName lastName' })
     .lean()
     .exec()
     .then((chats) => Promise.resolve({
@@ -35,8 +35,8 @@ function getMyChats(userId) {
 
 function joinChat(userId, chatId) {
   return Chat.findOne({ _id: chatId })
-    .populate({ path: 'creator', select: 'username profile' })
-    .populate({ path: 'members', select: 'username profile' })
+    .populate({ path: 'creator', select: 'username firstName lastName' })
+    .populate({ path: 'members', select: 'username firstName lastName' })
     .lean()
     .exec()
     .then((chat) => {
@@ -64,25 +64,32 @@ function joinChat(userId, chatId) {
       }, {
         new: true
       })
+        .populate({ path: 'creator', select: 'username firstName lastName' })
+        .populate({ path: 'members', select: 'username firstName lastName' })
         .lean()
         .exec();
     })
     .then((chat) => {
-      return messagesController.sendMessage(userId, chatId, {
+      const statusMessage = messagesController.sendMessage(userId, chatId, {
         content: ' joined',
         statusMessage: true,
       });
+
+      return Promise.all([chat, statusMessage]);
     })
-    .then(({ success, message }) => Promise.resolve({
-      success,
-      message,
-    }));
+    .then(([chat, statusMessage]) => {
+      return Promise.resolve({
+        success: statusMessage.success,
+        message: statusMessage.message,
+        chat,
+      })
+    });
 }
 
 function leaveChat(userId, chatId) {
   return Chat.findOne({ _id: chatId })
-    .populate({ path: 'creator', select: 'username profile' })
-    .populate({ path: 'members', select: 'username profile' })
+    .populate({ path: 'creator', select: 'username firstName lastName' })
+    .populate({ path: 'members', select: 'username firstName lastName' })
     .lean()
     .exec()
     .then((chat) => {
@@ -96,7 +103,14 @@ function leaveChat(userId, chatId) {
       const isCreator = chat.creator._id.toString() === userId;
       const isMember = chat.members.some(member => member._id.toString() === userId);
 
-      if (!isCreator && !isMember) {
+      if (isCreator) {
+        return Promise.reject({
+          success: false,
+          message: 'You cannot delete your own chat! You can only delete you own chats.'
+        })
+      }
+
+      if (!isMember) {
         return Promise.reject({
           success: false,
           message: 'User is not a member of this chat',
@@ -110,25 +124,32 @@ function leaveChat(userId, chatId) {
       }, {
         new: true
       })
+        .populate({ path: 'creator', select: 'username firstName lastName' })
+        .populate({ path: 'members', select: 'username firstName lastName' })
         .lean()
         .exec();
     })
     .then((chat) => {
-      return messagesController.sendMessage(userId, chatId, {
+      const statusMessage = messagesController.sendMessage(userId, chatId, {
         content: ' left',
         statusMessage: true,
       });
+
+      return Promise.all([chat, statusMessage]);
     })
-    .then(({ success, message }) => Promise.resolve({
-      success,
-      message,
-    }));
+    .then(([chat, statusMessage]) => {
+      return Promise.resolve({
+        success: statusMessage.success,
+        message: statusMessage.message,
+        chat,
+      })
+    });
 }
 
 function getChat(userId, chatId) {
   return Chat.findOne({ _id: chatId })
-    .populate({ path: 'creator', select:'username profile' })
-    .populate({ path: 'members', select:'username profile' })
+    .populate({ path: 'creator', select:'username firstName lastName' })
+    .populate({ path: 'members', select:'username firstName lastName' })
     .lean()
     .exec()
     .then((chat) => {
@@ -157,8 +178,8 @@ function newChat(userId, data) {
   return chat.save()
     .then((newChat) => {
       return Chat.findOne({ _id: newChat._id })
-        .populate({path: 'creator', select:'username profile'})
-        .populate({path: 'members', select:'username profile'})
+        .populate({path: 'creator', select:'username firstName lastName'})
+        .populate({path: 'members', select:'username firstName lastName'})
         .lean()
         .exec()
     })
@@ -178,7 +199,6 @@ function deleteChat(userId, chatId) {
   })
     .exec()
     .then((chat) => {
-      console.log(chat);
       if (!chat) {
         return Promise.reject({
           success: false,
@@ -190,8 +210,7 @@ function deleteChat(userId, chatId) {
     })
     .then(deletedChat => Promise.resolve({
       success: true,
-      message: 'Chat deleted!',
-      chat: deleteChat,
+      message: 'Chat deleted!'
     }));
 }
 

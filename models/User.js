@@ -4,11 +4,8 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true },
   password: String,
-  profile: {
-    firstName: { type: String, default: '' },
-    lastName: { type: String, default: '' },
-    city: { type: String, default: '' },
-  },
+  firstName: { type: String, default: '' },
+  lastName: { type: String, default: '' },
   lastVisit: Date,
 }, { timestamps: true });
 
@@ -37,7 +34,6 @@ userSchema.pre('save', function (next) {
 userSchema.methods.comparePassword = function (candidatePassword) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-      console.log({err, isMatch})
       if (err) {
         return reject(err);
       }

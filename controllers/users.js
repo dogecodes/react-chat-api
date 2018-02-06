@@ -5,7 +5,7 @@ const Message = require('../models/Message');
 // Get list of all users
 function getAllUsers(exceptId) {
   return User.find({ _id: { $ne: exceptId } })
-    .select('username profile')
+    .select('username firstName lastName')
     .exec()
     .then((users) => {
       return Promise.resolve({
@@ -19,7 +19,7 @@ function getAllUsers(exceptId) {
 // Get profile data for specific user by id
 function getUserData(userId) {
   return User.findOne({ _id: userId })
-    .select('username profile createdAt')
+    .select('username firstName lastName createdAt')
     .lean()
     .exec()
 }
@@ -28,7 +28,7 @@ function getUserData(userId) {
 function getUserChats(userId) {
   return Chat.find({ creator: userId })
     .limit(5)
-    .populate({ path: 'creator', select: 'username profile' })
+    .populate({ path: 'creator', select: 'username firstName lastName' })
     .sort({ createdAt: -1 })
     .lean()
     .exec() 
@@ -67,6 +67,13 @@ function getUserById(userId) {
 }
 
 function editUser(userId, data) {
+  if (!data.username) {
+    return Promise.rejcect({
+      success: false,
+      message: 'Username is not provided!'
+    });
+  }
+
   return User.findOne({
       _id: { $ne: userId },
       username: data.username
@@ -84,15 +91,12 @@ function editUser(userId, data) {
     .then((user) => {
       return User.findOneAndUpdate({ _id: userId }, {
         username: data.username,
-        profile: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          city: data.city,
-        },
+        firstName: data.firstName,
+        lastName: data.lastName,
       }, {
         new: true,
       })
-      .select('username profile')
+      .select('username firstName lastName')
     })
     .then((user) => {
       if (!user) {

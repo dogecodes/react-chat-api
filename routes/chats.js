@@ -82,14 +82,16 @@ chatsRouter.get('/:id', (req, res, next) => {
 
 chatsRouter.get('/:id/join', (req, res, next) => {
   chatsController.joinChat(req.decoded.userId, req.params.id)
-    .then(({ success, message }) => {
+    .then(({ success, chat, message }) => {
       res.io.to(req.params.id).emit('new-message', {
         success,
         message,
+        chat,
       });
       res.json({
         success,
         message,
+        chat,
       });
     })
     .catch((error) => {
@@ -102,14 +104,16 @@ chatsRouter.get('/:id/join', (req, res, next) => {
 
 chatsRouter.get('/:id/leave', (req, res, next) => {
   chatsController.leaveChat(req.decoded.userId, req.params.id)
-    .then(({ success, message }) => {
+    .then(({ success, chat, message }) => {
       res.io.to(req.params.id).emit('new-message', {
         success,
         message,
+        chat,
       });
       res.json({
         success,
         message,
+        chat,
       });
     })
     .catch((error) => {
@@ -143,16 +147,20 @@ chatsRouter.post('/:id/send', (req, res, next) => {
 
 chatsRouter.delete('/:id/delete', (req, res, next) => {
   chatsController.deleteChat(req.decoded.userId, req.params.id)
-    .then(({ success, message, chats }) => {
+  .then(({ success, message, chatId }) => {
       res.io.emit('deleted-chat', {
         success,
         message,
-        chat: req.params.id,
+        chat: {
+          _id: req.params.id
+        }
       });
       res.json({
-        success: result.success,
-        message: result.message,
-        chats: result.chats,
+        success,
+        message,
+        chat: {
+          _id: req.params.id
+        }
       });
     })
     .catch((error) => {

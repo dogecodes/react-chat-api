@@ -42,7 +42,8 @@ function signUp(username, password) {
         user: {
           id: savedUser._id,
           username: savedUser.username,
-          profile: savedUser.profile,
+          firstName: savedUser.firstName,
+          lastName: savedUser.lastName,
         }
       });
     });
@@ -92,7 +93,8 @@ function login(username, password) {
         user: {
           id: user._id,
           username: user.username,
-          profile: user.profile
+          firstName: user.firstName,
+          lastName: user.lastName,
         }
       });
     });
