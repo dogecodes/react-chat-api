@@ -6,7 +6,7 @@ const cors = require('cors');
 const SocketIOServer = require('socket.io');
 const routes = require('./routes');
 const socketio = require('./middlewares/socketio');
-const { MONGODB_URI } = require('./config');
+const { PORT, MONGODB_URI } = require('./config');
 
 const app = express();
 
@@ -50,6 +50,6 @@ app.use('/', routes);
 
 // Start listening
 
-server.listen(8000, () => {
+server.listen(PORT, () => {
   console.log(`Listening on ${server.address().port}`);
 });
