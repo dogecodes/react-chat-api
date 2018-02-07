@@ -6,6 +6,7 @@ const cors = require('cors');
 const SocketIOServer = require('socket.io');
 const routes = require('./routes');
 const socketio = require('./middlewares/socketio');
+const { MONGODB_URI } = require('./config');
 
 const app = express();
 
@@ -16,7 +17,7 @@ const io = SocketIOServer(server);
 // Open MongoDB connection
 mongoose.Promise = Promise;
 
-mongoose.connect('mongodb://localhost/dogecodes-react-chat', {
+mongoose.connect(MONGODB_URI, {
   useMongoClient: true,
 });
 

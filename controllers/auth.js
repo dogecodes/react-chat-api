@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const { secret } = require('../config');
+const { JWT_SECRET } = require('../config');
+const userContoller = require('./users');
 
 // Sign up new user by username and password
 function signUp(username, password) {
@@ -29,9 +30,12 @@ function signUp(username, password) {
       return newUser.save();
     })
     .then((savedUser) => {
+      return userContoller.getUserById(savedUser._id);
+    })
+    .then(({ user }) => {
       const token = jwt.sign(
-        { userId: savedUser._id },
-        secret,
+        { userId: user._id },
+        JWT_SECRET,
         { expiresIn: 60 * 60 * 24 * 10 } // 10 days
       );
 
@@ -39,12 +43,7 @@ function signUp(username, password) {
         success: true,
         message: 'User has been created',
         token,
-        user: {
-          id: savedUser._id,
-          username: savedUser.username,
-          firstName: savedUser.firstName,
-          lastName: savedUser.lastName,
-        }
+        user,
       });
     });
 }
@@ -79,23 +78,23 @@ function login(username, password) {
           message: 'The username or password you entered is incorrect.',
         });
       }
-
+      return user;
+    })
+    .then((savedUser) => {
+      return userContoller.getUserById(savedUser._id);
+    })
+    .then(({ user }) => {
       const token = jwt.sign(
         { userId: user._id },
-        secret,
-        { expiresIn: 86400 }
+        JWT_SECRET,
+        { expiresIn: 60 * 60 * 24 * 10 } // 10 days
       );
       
       return Promise.resolve({
         success: true,
         message: 'Success! You are logged in.',
         token,
-        user: {
-          id: user._id,
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-        }
+        user,
       });
     });
 }

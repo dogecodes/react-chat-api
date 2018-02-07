@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { secret } = require('../config');
+const { JWT_SECRET } = require('../config');
 
 // Checking token middleware
 function auth(req, res, next) {
@@ -7,7 +7,7 @@ function auth(req, res, next) {
     const [prefix, token] = req.headers.authorization.split(' ');
 
     if (prefix === 'Bearer') {
-      jwt.verify(token, secret, (err, decoded) => {
+      jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
           return res.status(403).send({
             success: false,
