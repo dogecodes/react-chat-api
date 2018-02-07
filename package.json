@@ -7,15 +7,13 @@
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "forever": "^0.15.3",
     "jsonwebtoken": "^8.1.1",
     "mongoose": "^4.13.10",
     "socket.io": "^2.0.4"
   },
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "nodemon index.js"
-  },
-  "devDependencies": {
-    "nodemon": "^1.14.11"
+    "start": "forever index.js",
+    "start:dev": "forever --watch index.js"
   }
 }
