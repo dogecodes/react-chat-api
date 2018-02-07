@@ -28,7 +28,7 @@ db.on('error', (error) => {
 });
 
 db.once('open', () => {
-  console.log('Database connected');
+  console.log('Database connected!');
 });
 
 // Use url body parser
@@ -51,5 +51,12 @@ app.use('/', routes);
 // Start listening
 
 server.listen(PORT, () => {
-  console.log(`Listening on ${server.address().port}`);
+  console.log(`App is listening on ${server.address().port}`);
+});
+
+// Handling unhandled rejections
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise);
+  console.error('Reason:', reason);
 });
