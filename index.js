@@ -46,7 +46,7 @@ app.use(socketio(io))
 
 // Use routers
 
-app.use('/', routes);
+app.use('/v1', routes);
 
 // Start listening
 
