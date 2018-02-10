@@ -1,15 +1,16 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 const Message = require('../models/Message');
 
 function sendMessage(userId, chatId, data) {
   const message = new Message(Object.assign({}, data, {
-    sender: userId,
-    chatId: chatId,
-    statusMessageUserId: userId,
+    sender: ObjectId(userId),
+    chatId: ObjectId(chatId),
+    statusMessageUserId: ObjectId(userId),
   }));
 
   return message.save()
     .then((savedMessage) => {
-      return Message.findOne({ _id: savedMessage._id })
+      return Message.findOne({ _id: ObjectId(savedMessage._id) })
         .populate({ path: 'sender', select: 'username firstName lastName' })
         .exec();
     })
@@ -20,7 +21,7 @@ function sendMessage(userId, chatId, data) {
 }
 
 function getAllMessages(chatId) {
-  return Message.find({ chatId })
+  return Message.find({ chatId: ObjectId(chatId) })
     .populate({ path: 'sender', select:'username firstName lastName' })
     .sort({ createdAt: 1 })
     .exec()

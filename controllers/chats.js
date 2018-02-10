@@ -1,3 +1,4 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 const User = require('../models/User');
 const Chat = require('../models/Chat');
 const Message = require('../models/Message');
@@ -19,8 +20,8 @@ function getAllChats() {
 function getMyChats(userId) {
   return Chat.find({
     $or: [
-      { creator: userId },
-      { members: userId }
+      { creator: ObjectId(userId) },
+      { members: ObjectId(userId) }
     ]
   })
     .populate({ path: 'creator', select: 'username firstName lastName' })
@@ -34,7 +35,7 @@ function getMyChats(userId) {
 }
 
 function joinChat(userId, chatId) {
-  return Chat.findOne({ _id: chatId })
+  return Chat.findOne({ _id: ObjectId(chatId) })
     .populate({ path: 'creator', select: 'username firstName lastName' })
     .populate({ path: 'members', select: 'username firstName lastName' })
     .lean()
@@ -58,9 +59,9 @@ function joinChat(userId, chatId) {
       }
 
       return Chat.findOneAndUpdate({
-        _id: chatId
+        _id: ObjectId(chatId)
       }, {
-        $push: { members: userId }
+        $push: { members: ObjectId(userId) }
       }, {
         new: true
       })
@@ -87,7 +88,7 @@ function joinChat(userId, chatId) {
 }
 
 function leaveChat(userId, chatId) {
-  return Chat.findOne({ _id: chatId })
+  return Chat.findOne({ _id: ObjectId(chatId) })
     .populate({ path: 'creator', select: 'username firstName lastName' })
     .populate({ path: 'members', select: 'username firstName lastName' })
     .lean()
@@ -118,9 +119,9 @@ function leaveChat(userId, chatId) {
       }
 
       return Chat.findOneAndUpdate({
-        _id: chatId
+        _id: ObjectId(chatId)
       }, {
-        $pull: { members: userId }
+        $pull: { members: ObjectId(userId) }
       }, {
         new: true
       })
@@ -147,7 +148,7 @@ function leaveChat(userId, chatId) {
 }
 
 function getChat(userId, chatId) {
-  return Chat.findOne({ _id: chatId })
+  return Chat.findOne({ _id: ObjectId(chatId) })
     .populate({ path: 'creator', select:'username firstName lastName' })
     .populate({ path: 'members', select:'username firstName lastName' })
     .lean()
@@ -169,7 +170,7 @@ function getChat(userId, chatId) {
 
 function newChat(userId, data) {
   const chat = new Chat({
-    creator: userId,
+    creator: ObjectId(userId),
     title: data.title,
     description: data.description,
     members: data.members,
@@ -177,7 +178,7 @@ function newChat(userId, data) {
 
   return chat.save()
     .then((newChat) => {
-      return Chat.findOne({ _id: newChat._id })
+      return Chat.findOne({ _id: ObjectId(newChat._id) })
         .populate({path: 'creator', select:'username firstName lastName'})
         .populate({path: 'members', select:'username firstName lastName'})
         .lean()
@@ -194,8 +195,8 @@ function newChat(userId, data) {
 
 function deleteChat(userId, chatId) {
   return Chat.findOne({
-    creator: userId,
-    _id: chatId,
+    creator: ObjectId(userId),
+    _id: ObjectId(chatId),
   })
     .exec()
     .then((chat) => {
@@ -206,7 +207,7 @@ function deleteChat(userId, chatId) {
         });
       }
 
-      return Chat.remove({ _id: chatId }).exec();
+      return Chat.remove({ _id: ObjectId(chatId) }).exec();
     })
     .then(deletedChat => Promise.resolve({
       success: true,

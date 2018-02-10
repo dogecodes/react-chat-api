@@ -1,10 +1,11 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 const User = require('../models/User');
 const Chat = require('../models/Chat');
 const Message = require('../models/Message');
 
 // Get list of all users
 function getAllUsers(exceptId) {
-  return User.find({ _id: { $ne: exceptId } })
+  return User.find({ _id: { $ne: ObjectId(exceptId) } })
     .select('username firstName lastName')
     .exec()
     .then((users) => {
@@ -18,7 +19,7 @@ function getAllUsers(exceptId) {
 
 // Get profile data for specific user by id
 function getUserData(userId) {
-  return User.findOne({ _id: userId })
+  return User.findOne({ _id: ObjectId(userId) })
     .select('username firstName lastName createdAt')
     .lean()
     .exec()
@@ -26,7 +27,7 @@ function getUserData(userId) {
 
 // Get chats where user is a member
 function getUserChats(userId) {
-  return Chat.find({ creator: userId })
+  return Chat.find({ creator: ObjectId(userId) })
     .limit(5)
     .populate({ path: 'creator', select: 'username firstName lastName' })
     .sort({ createdAt: -1 })
@@ -37,7 +38,7 @@ function getUserChats(userId) {
 
 // Count the amount of messages by specific user
 function countUserMessages(userId) {
-  return Message.find({ sender: userId, statusMessage: false })
+  return Message.find({ sender: ObjectId(userId), statusMessage: false })
     .count()
     .exec()
     .then(count => count || 0);
@@ -75,7 +76,7 @@ function editUser(userId, data) {
   }
 
   return User.findOne({
-      _id: { $ne: userId },
+      _id: { $ne: ObjectId(userId) },
       username: data.username
     })
     .then((user) => { 
@@ -89,7 +90,7 @@ function editUser(userId, data) {
       return user;
     })
     .then((user) => {
-      return User.findOneAndUpdate({ _id: userId }, {
+      return User.findOneAndUpdate({ _id: ObjectId(userId) }, {
         username: data.username,
         firstName: data.firstName,
         lastName: data.lastName,
