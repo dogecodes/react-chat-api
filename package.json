@@ -14,6 +14,25 @@
   },
   "scripts": {
     "start": "forever index.js",
-    "start:dev": "forever --watch index.js"
+    "start:dev": "forever --watch index.js",
+    "lint": "eslint **/*.js",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier-eslint --write **/*.js",
+    "precommit": "lint-staged"
+  },
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.0",
+    "prettier-eslint-cli": "^4.7.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint:fix",
+      "npm run format",
+      "git add"
+    ]
   }
 }
