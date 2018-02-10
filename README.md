@@ -71,7 +71,7 @@ Sockets connection requires authentication with access-token. Here's an example 
 ```js
 import SocketIOClient from 'socket.io-client';
 
-socket = SocketIOClient(config.API_URI, {
+socket = SocketIOClient('path/to/api', {
   query: {
     token: '...your access-token here...'
   }
