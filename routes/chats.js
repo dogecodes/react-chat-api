@@ -5,23 +5,27 @@ const messagesController = require('../controllers/messages');
 const chatsRouter = new Router();
 
 chatsRouter.get('/', (req, res, next) => {
-  chatsController.getAllChats()
+  chatsController
+    .getAllChats()
     .then((result) => {
       res.json({
         success: result.success,
         chats: result.chats,
       });
+      next();
     })
     .catch((error) => {
       res.json({
         success: false,
         message: error.message,
       });
+      next();
     });
 });
 
 chatsRouter.post('/', (req, res, next) => {
-  chatsController.newChat(req.decoded.userId, req.body.data)
+  chatsController
+    .newChat(req.decoded.userId, req.body.data)
     .then(({ success, message, chat }) => {
       res.io.emit('new-chat', {
         success,
@@ -33,28 +37,33 @@ chatsRouter.post('/', (req, res, next) => {
         message,
         chat,
       });
+      next();
     })
     .catch((error) => {
       res.json({
         success: false,
         message: error.message,
       });
+      next();
     });
 });
 
 chatsRouter.get('/my', (req, res, next) => {
-  chatsController.getMyChats(req.decoded.userId)
+  chatsController
+    .getMyChats(req.decoded.userId)
     .then(({ success, chats }) => {
       res.json({
         success,
         chats,
       });
+      next();
     })
     .catch((error) => {
       res.json({
         success: false,
         message: error.message,
       });
+      next();
     });
 });
 
@@ -62,7 +71,7 @@ chatsRouter.get('/:id', (req, res, next) => {
   // Current implementation is a bit shity, don't blame me.
   Promise.all([
     chatsController.getChat(req.decoded.userId, req.params.id),
-    messagesController.getAllMessages(req.params.id)
+    messagesController.getAllMessages(req.params.id),
   ])
     .then(([chatResponse, messagesResponse]) => {
       res.json({
@@ -71,17 +80,20 @@ chatsRouter.get('/:id', (req, res, next) => {
           messages: messagesResponse.messages,
         }),
       });
+      next();
     })
     .catch((error) => {
       res.json({
         success: false,
         message: error.message,
       });
+      next();
     });
 });
 
 chatsRouter.post('/:id', (req, res, next) => {
-  messagesController.sendMessage(req.decoded.userId, req.params.id, req.body.data)
+  messagesController
+    .sendMessage(req.decoded.userId, req.params.id, req.body.data)
     .then(({ success, message }) => {
       // send socket to all members of chat and creator
       res.io.to(req.params.id).emit('new-message', {
@@ -91,18 +103,21 @@ chatsRouter.post('/:id', (req, res, next) => {
       res.json({
         success,
         message,
-      })
+      });
+      next();
     })
     .catch((error) => {
       res.json({
         success: false,
         message: error.message,
       });
+      next();
     });
 });
 
 chatsRouter.get('/:id/join', (req, res, next) => {
-  chatsController.joinChat(req.decoded.userId, req.params.id)
+  chatsController
+    .joinChat(req.decoded.userId, req.params.id)
     .then(({ success, chat, message }) => {
       res.io.to(req.params.id).emit('new-message', {
         success,
@@ -114,17 +129,20 @@ chatsRouter.get('/:id/join', (req, res, next) => {
         message,
         chat,
       });
+      next();
     })
     .catch((error) => {
       res.json({
         success: false,
         message: error.message,
       });
+      next();
     });
 });
 
 chatsRouter.get('/:id/leave', (req, res, next) => {
-  chatsController.leaveChat(req.decoded.userId, req.params.id)
+  chatsController
+    .leaveChat(req.decoded.userId, req.params.id)
     .then(({ success, chat, message }) => {
       res.io.to(req.params.id).emit('new-message', {
         success,
@@ -136,38 +154,43 @@ chatsRouter.get('/:id/leave', (req, res, next) => {
         message,
         chat,
       });
+      next();
     })
     .catch((error) => {
       res.json({
         success: false,
         message: error.message,
       });
+      next();
     });
 });
 
 chatsRouter.delete('/:id', (req, res, next) => {
-  chatsController.deleteChat(req.decoded.userId, req.params.id)
-  .then(({ success, message, chatId }) => {
+  chatsController
+    .deleteChat(req.decoded.userId, req.params.id)
+    .then(({ success, message, chatId }) => {
       res.io.emit('deleted-chat', {
         success,
         message,
         chat: {
-          _id: req.params.id
-        }
+          _id: chatId,
+        },
       });
       res.json({
         success,
         message,
         chat: {
-          _id: req.params.id
-        }
+          _id: req.params.id,
+        },
       });
+      next();
     })
     .catch((error) => {
       res.json({
         success: false,
         message: error.message,
       });
+      next();
     });
 });
 

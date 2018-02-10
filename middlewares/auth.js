@@ -14,7 +14,7 @@ function auth(req, res, next) {
             message: 'Failed to authenticate token.',
           });
         }
-  
+
         req.decoded = decoded;
         return next();
       });
@@ -25,6 +25,11 @@ function auth(req, res, next) {
       message: 'No token provided',
     });
   }
+
+  return res.status(500).send({
+    success: false,
+    message: 'Unknown error',
+  });
 }
 
 module.exports = auth;

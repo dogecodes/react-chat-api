@@ -8,7 +8,7 @@ function signUp(username, password) {
   if (!username || !password) {
     return Promise.reject({
       success: false,
-      message: 'Please, provide username and password!'
+      message: 'Please, provide username and password!',
     });
   }
 
@@ -23,20 +23,18 @@ function signUp(username, password) {
       }
 
       const newUser = new User({
-        username: username,
-        password: password,
+        username,
+        password,
       });
 
       return newUser.save();
     })
-    .then((savedUser) => {
-      return userContoller.getUserById(savedUser._id);
-    })
+    .then(savedUser => userContoller.getUserById(savedUser._id))
     .then(({ user }) => {
       const token = jwt.sign(
         { userId: user._id },
         JWT_SECRET,
-        { expiresIn: 60 * 60 * 24 * 10 } // 10 days
+        { expiresIn: 60 * 60 * 24 * 10 }, // 10 days
       );
 
       return Promise.resolve({
@@ -53,23 +51,21 @@ function login(username, password) {
   if (!username || !password) {
     return Promise.reject({
       success: false,
-      message: 'Please, provide username and password!'
+      message: 'Please, provide username and password!',
     });
   }
 
-  return User.findOne({ username: username.toLowerCase() }).exec()
+  return User.findOne({ username: username.toLowerCase() })
+    .exec()
     .then((user) => {
       if (!user) {
         return Promise.reject({
           message: 'Sorry, no account found with the username',
-          notExists: true
-        })
+          notExists: true,
+        });
       }
 
-      return Promise.all([
-        Promise.resolve(user),
-        user.comparePassword(password)
-      ]);
+      return Promise.all([Promise.resolve(user), user.comparePassword(password)]);
     })
     .then(([user, isPasswordMatch]) => {
       if (!isPasswordMatch) {
@@ -80,16 +76,14 @@ function login(username, password) {
       }
       return user;
     })
-    .then((savedUser) => {
-      return userContoller.getUserById(savedUser._id);
-    })
+    .then(savedUser => userContoller.getUserById(savedUser._id))
     .then(({ user }) => {
       const token = jwt.sign(
         { userId: user._id },
         JWT_SECRET,
-        { expiresIn: 60 * 60 * 24 * 10 } // 10 days
+        { expiresIn: 60 * 60 * 24 * 10 }, // 10 days
       );
-      
+
       return Promise.resolve({
         success: true,
         message: 'Success! You are logged in.',
@@ -104,7 +98,7 @@ function login(username, password) {
 function logout() {
   return Promise.resolve({
     success: true,
-    message: 'You are now logged out'
+    message: 'You are now logged out',
   });
 }
 

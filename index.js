@@ -24,10 +24,12 @@ mongoose.connect(MONGODB_URI, {
 const db = mongoose.connection;
 
 db.on('error', (error) => {
-  console.error('Database connection error:', error)
+  // eslint-disable-next-line
+  console.error('Database connection error:', error);
 });
 
 db.once('open', () => {
+  // eslint-disable-next-line
   console.log('Database connected!');
 });
 
@@ -42,7 +44,7 @@ app.use(cors());
 
 // Add socket.io
 
-app.use(socketio(io))
+app.use(socketio(io));
 
 // Use routers
 
@@ -51,12 +53,15 @@ app.use('/v1', routes);
 // Start listening
 
 server.listen(PORT, () => {
+  // eslint-disable-next-line
   console.log(`App is listening on ${server.address().port}`);
 });
 
 // Handling unhandled rejections
 
 process.on('unhandledRejection', (reason, promise) => {
+  // eslint-disable-next-line
   console.error('Unhandled Rejection at:', promise);
+  // eslint-disable-next-line
   console.error('Reason:', reason);
 });

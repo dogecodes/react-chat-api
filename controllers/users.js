@@ -1,4 +1,4 @@
-const ObjectId = require('mongoose').Types.ObjectId;
+const { ObjectId } = require('mongoose').Types;
 const User = require('../models/User');
 const Chat = require('../models/Chat');
 const Message = require('../models/Message');
@@ -8,13 +8,12 @@ function getAllUsers(exceptId) {
   return User.find({ _id: { $ne: ObjectId(exceptId) } })
     .select('username firstName lastName')
     .exec()
-    .then((users) => {
-      return Promise.resolve({
+    .then(users =>
+      Promise.resolve({
         success: true,
         message: 'Users has been found',
-        users
-      });
-    })
+        users,
+      }));
 }
 
 // Get profile data for specific user by id
@@ -22,7 +21,7 @@ function getUserData(userId) {
   return User.findOne({ _id: ObjectId(userId) })
     .select('username firstName lastName createdAt')
     .lean()
-    .exec()
+    .exec();
 }
 
 // Get chats where user is a member
@@ -32,7 +31,7 @@ function getUserChats(userId) {
     .populate({ path: 'creator', select: 'username firstName lastName' })
     .sort({ createdAt: -1 })
     .lean()
-    .exec() 
+    .exec()
     .then(chats => chats || []);
 }
 
@@ -46,40 +45,37 @@ function countUserMessages(userId) {
 
 // Get User data by specific id
 function getUserById(userId) {
-  return Promise.all([
-    getUserData(userId),
-    getUserChats(userId),
-    countUserMessages(userId)
-  ])
-    .then(([user, chats, messagesCount]) => {
-      if (!user) {
-        return Promise.reject({
-          success: false,
-          message: 'There is no users with this ID',
-        });
-      }
+  const userPromises = [getUserData(userId), getUserChats(userId), countUserMessages(userId)];
 
-      return Promise.resolve({
-        success: true,
-        message: 'User information has been retrieved',
-        user: Object.assign({}, user, { chats, messagesCount }),
-      })
-    })
+  return Promise.all(userPromises).then(([user, chats, messagesCount]) => {
+    if (!user) {
+      return Promise.reject({
+        success: false,
+        message: 'There is no users with this ID',
+      });
+    }
+
+    return Promise.resolve({
+      success: true,
+      message: 'User information has been retrieved',
+      user: Object.assign({}, user, { chats, messagesCount }),
+    });
+  });
 }
 
 function editUser(userId, data) {
   if (!data.username) {
     return Promise.rejcect({
       success: false,
-      message: 'Username is not provided!'
+      message: 'Username is not provided!',
     });
   }
 
   return User.findOne({
-      _id: { $ne: ObjectId(userId) },
-      username: data.username
-    })
-    .then((user) => { 
+    _id: { $ne: ObjectId(userId) },
+    username: data.username,
+  })
+    .then((user) => {
       if (user) {
         return Promise.reject({
           success: false,
@@ -89,29 +85,31 @@ function editUser(userId, data) {
 
       return user;
     })
-    .then((user) => {
-      return User.findOneAndUpdate({ _id: ObjectId(userId) }, {
-        username: data.username,
-        firstName: data.firstName,
-        lastName: data.lastName,
-      }, {
-        new: true,
-      })
-      .select('username firstName lastName')
-    })
+    .then(() =>
+      User.findOneAndUpdate(
+        { _id: ObjectId(userId) },
+        {
+          username: data.username,
+          firstName: data.firstName,
+          lastName: data.lastName,
+        },
+        {
+          new: true,
+        },
+      ).select('username firstName lastName'))
     .then((user) => {
       if (!user) {
         return Promise.reject({
           success: false,
           message: 'User not found!',
-          notExists: true
-        })
+          notExists: true,
+        });
       }
 
       return Promise.resolve({
         success: true,
         message: 'User has been updated!',
-        user
+        user,
       });
     });
 }
