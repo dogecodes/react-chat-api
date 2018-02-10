@@ -34,8 +34,6 @@ function socketio(io) {
 
       return sendMessage(socket.decoded.userId, chatId, { content })
         .then(({ success, message }) => {
-          // TODO: Implement sending .to specific chat
-          // user socket.broadcast, and update list of messages on client
           io.to(chatId).emit('new-message', {
             success,
             message

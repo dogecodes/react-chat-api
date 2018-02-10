@@ -54,7 +54,7 @@ usersRouter.get('/:id', (req, res, next) => {
     });
 });
 
-usersRouter.post('/me/edit', (req, res, next) => {
+usersRouter.post('/me', (req, res, next) => {
   usersController.editUser(req.decoded.userId, req.body.data)
     .then((result) => {
       res.json({

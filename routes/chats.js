@@ -20,23 +20,7 @@ chatsRouter.get('/', (req, res, next) => {
     });
 });
 
-chatsRouter.get('/my', (req, res, next) => {
-  chatsController.getMyChats(req.decoded.userId)
-    .then(({ success, chats }) => {
-      res.json({
-        success,
-        chats,
-      });
-    })
-    .catch((error) => {
-      res.json({
-        success: false,
-        message: error.message,
-      });
-    });
-});
-
-chatsRouter.post('/new', (req, res, next) => {
+chatsRouter.post('/', (req, res, next) => {
   chatsController.newChat(req.decoded.userId, req.body.data)
     .then(({ success, message, chat }) => {
       res.io.emit('new-chat', {
@@ -48,6 +32,22 @@ chatsRouter.post('/new', (req, res, next) => {
         success,
         message,
         chat,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: error.message,
+      });
+    });
+});
+
+chatsRouter.get('/my', (req, res, next) => {
+  chatsController.getMyChats(req.decoded.userId)
+    .then(({ success, chats }) => {
+      res.json({
+        success,
+        chats,
       });
     })
     .catch((error) => {
@@ -71,6 +71,27 @@ chatsRouter.get('/:id', (req, res, next) => {
           messages: messagesResponse.messages,
         }),
       });
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: error.message,
+      });
+    });
+});
+
+chatsRouter.post('/:id', (req, res, next) => {
+  messagesController.sendMessage(req.decoded.userId, req.params.id, req.body.data)
+    .then(({ success, message }) => {
+      // send socket to all members of chat and creator
+      res.io.to(req.params.id).emit('new-message', {
+        success,
+        message,
+      });
+      res.json({
+        success,
+        message,
+      })
     })
     .catch((error) => {
       res.json({
@@ -124,28 +145,7 @@ chatsRouter.get('/:id/leave', (req, res, next) => {
     });
 });
 
-chatsRouter.post('/:id/send', (req, res, next) => {
-  messagesController.sendMessage(req.decoded.userId, req.params.id, req.body.data)
-    .then(({ success, message }) => {
-      // send socket to all members of chat and creator
-      res.io.to(req.params.id).emit('new-message', {
-        success,
-        message,
-      });
-      res.json({
-        success,
-        message,
-      })
-    })
-    .catch((error) => {
-      res.json({
-        success: false,
-        message: error.message,
-      });
-    });
-});
-
-chatsRouter.delete('/:id/delete', (req, res, next) => {
+chatsRouter.delete('/:id', (req, res, next) => {
   chatsController.deleteChat(req.decoded.userId, req.params.id)
   .then(({ success, message, chatId }) => {
       res.io.emit('deleted-chat', {
