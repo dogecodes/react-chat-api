@@ -23,8 +23,10 @@ Use following commands to run this API-server localy:
 git clone https://github.com/dogecodes/react-chat-api.git
 cd react-chat-api
 npm install
-npm start:dev # or `npm start` for production
+npm run start:dev # or `npm start` for production
 ```
+
+**Note:** Don't forget to start `mongod` for connection to database.
 
 ## API
 
