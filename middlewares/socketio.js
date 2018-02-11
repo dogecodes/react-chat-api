@@ -3,6 +3,7 @@ const { JWT_SECRET } = require('../config');
 
 const { sendMessage } = require('../controllers/messages');
 
+// Socket.IO Middleware for Auth
 function socketAuth(socket, next) {
   const { token } = socket.handshake.query;
 
@@ -22,7 +23,10 @@ function socketAuth(socket, next) {
 function socketio(io) {
   io.use(socketAuth);
 
-  io.on('connection', (socket) => {
+  const v1 = io.of('/v1');
+
+  // TODO: Move this sockets handlers somewhere
+  v1.on('connection', (socket) => {
     socket.on('mount-chat', (chatId) => {
       socket.join(chatId);
     });
