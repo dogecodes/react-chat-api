@@ -5,8 +5,9 @@ const { sendMessage } = require('../controllers/messages');
 
 function socketAuth(socket, next) {
   const { token } = socket.handshake.query;
+
   if (token) {
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    return jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
         return next(new Error('Failed to authenticate socket'));
       }

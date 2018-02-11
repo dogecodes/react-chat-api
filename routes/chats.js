@@ -12,7 +12,6 @@ chatsRouter.get('/', (req, res, next) => {
         success: result.success,
         chats: result.chats,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -37,7 +36,6 @@ chatsRouter.post('/', (req, res, next) => {
         message,
         chat,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -56,7 +54,6 @@ chatsRouter.get('/my', (req, res, next) => {
         success,
         chats,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -80,7 +77,6 @@ chatsRouter.get('/:id', (req, res, next) => {
           messages: messagesResponse.messages,
         }),
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -104,7 +100,6 @@ chatsRouter.post('/:id', (req, res, next) => {
         success,
         message,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -129,7 +124,6 @@ chatsRouter.get('/:id/join', (req, res, next) => {
         message,
         chat,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -154,7 +148,6 @@ chatsRouter.get('/:id/leave', (req, res, next) => {
         message,
         chat,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -183,7 +176,6 @@ chatsRouter.delete('/:id', (req, res, next) => {
           _id: req.params.id,
         },
       });
-      next();
     })
     .catch((error) => {
       res.json({

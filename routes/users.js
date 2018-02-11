@@ -12,7 +12,6 @@ usersRouter.get('/', (req, res, next) => {
         message: result.message,
         users: result.users,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -32,7 +31,6 @@ usersRouter.get('/me', (req, res, next) => {
         message: result.message,
         user: result.user,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -52,7 +50,6 @@ usersRouter.get('/:id', (req, res, next) => {
         message: result.message,
         user: result.user,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -72,7 +69,6 @@ usersRouter.post('/me', (req, res, next) => {
         message: result.message,
         user: result.user,
       });
-      next();
     })
     .catch((error) => {
       res.json({

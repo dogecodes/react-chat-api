@@ -16,7 +16,6 @@ authRouter.post('/signup', (req, res, next) => {
         user: result.user,
         token: result.token,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -40,7 +39,6 @@ authRouter.post('/login', (req, res, next) => {
         user: result.user,
         token: result.token,
       });
-      next();
     })
     .catch((error) => {
       res.json({
@@ -59,7 +57,6 @@ authRouter.get('/logout', (req, res, next) => {
         success: result.success,
         message: result.message,
       });
-      next();
     })
     .catch((error) => {
       res.json({
