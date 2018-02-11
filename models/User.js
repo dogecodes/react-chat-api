@@ -35,8 +35,8 @@ userSchema.pre('save', function checkPassword(next) {
 });
 
 // Helper method for validating user's password.
-userSchema.methods.comparePassword = candidatePassword =>
-  new Promise((resolve, reject) => {
+userSchema.methods.comparePassword = function comparePassword(candidatePassword) {
+  return new Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
       if (err) {
         return reject(err);
@@ -44,5 +44,6 @@ userSchema.methods.comparePassword = candidatePassword =>
       return resolve(isMatch);
     });
   });
+};
 
 module.exports = mongoose.model('User', userSchema);
