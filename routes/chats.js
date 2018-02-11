@@ -19,7 +19,7 @@ chatsRouter.get('/', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -44,7 +44,7 @@ chatsRouter.post('/', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -63,7 +63,7 @@ chatsRouter.get('/my', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -87,7 +87,7 @@ chatsRouter.get('/:id', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -111,7 +111,7 @@ chatsRouter.post('/:id', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -136,7 +136,7 @@ chatsRouter.get('/:id/join', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -161,7 +161,7 @@ chatsRouter.get('/:id/leave', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -190,7 +190,7 @@ chatsRouter.delete('/:id', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 

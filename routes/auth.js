@@ -23,7 +23,7 @@ authRouter.post('/signup', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -47,7 +47,7 @@ authRouter.post('/login', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -66,7 +66,7 @@ authRouter.get('/logout', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 

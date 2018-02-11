@@ -39,7 +39,7 @@ usersRouter.get('/me', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -59,7 +59,7 @@ usersRouter.get('/:id', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 
@@ -79,7 +79,7 @@ usersRouter.post('/me', (req, res, next) => {
         success: false,
         message: error.message,
       });
-      next();
+      next(error);
     });
 });
 

@@ -7,7 +7,7 @@ function auth(req, res, next) {
     const [prefix, token] = req.headers.authorization.split(' ');
 
     if (prefix === 'Bearer') {
-      jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      return jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
           return res.status(403).send({
             success: false,
@@ -19,16 +19,11 @@ function auth(req, res, next) {
         return next();
       });
     }
-  } else {
-    return res.status(403).send({
-      success: false,
-      message: 'No token provided',
-    });
   }
 
-  return res.status(500).send({
+  return res.status(403).send({
     success: false,
-    message: 'Unknown error',
+    message: 'No token provided',
   });
 }
 
