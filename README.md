@@ -4,7 +4,7 @@
 
 # Chat API
 
-> Chat application for DogeCodes React course.
+> API for chat application for DogeCodes React course.
 
 This is a simple API server that implements a logic required to correct work of DogeCodes React Chat application.
 
