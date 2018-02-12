@@ -7,26 +7,26 @@ const { sendMessage } = require('../controllers/messages');
 function socketAuth(socket, next) {
   const { token } = socket.handshake.query;
 
-  if (token) {
-    return jwt.verify(token, JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return next(new Error('Failed to authenticate socket'));
-      }
-      // eslint-disable-next-line
-      socket.decoded = decoded;
-      return next();
-    });
+  if (!token) {
+    return next(new Error('Failed to authenticate socket'));
   }
-  return next(new Error('Failed to authenticate socket'));
+
+  return jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return next(new Error('Failed to authenticate socket'));
+    }
+
+    // eslint-disable-next-line
+    socket.decoded = decoded;
+    return next();
+  });
 }
 
 function socketio(io) {
   io.use(socketAuth);
 
-  const v1 = io.of('/v1');
-
   // TODO: Move this sockets handlers somewhere
-  v1.on('connection', (socket) => {
+  io.on('connection', (socket) => {
     socket.on('mount-chat', (chatId) => {
       socket.join(chatId);
     });
