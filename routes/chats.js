@@ -161,12 +161,12 @@ chatsRouter.get('/:id/leave', (req, res, next) => {
 chatsRouter.delete('/:id', (req, res, next) => {
   chatsController
     .deleteChat(req.decoded.userId, req.params.id)
-    .then(({ success, message, chatId }) => {
+    .then(({ success, message }) => {
       res.io.emit('deleted-chat', {
         success,
         message,
         chat: {
-          _id: chatId,
+          _id: req.params.id,
         },
       });
       res.json({
