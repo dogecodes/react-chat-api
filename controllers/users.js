@@ -64,7 +64,7 @@ function getUserById(userId) {
 
 function editUser(userId, data) {
   if (!data.username) {
-    return Promise.rejcect({
+    return Promise.reject({
       success: false,
       message: 'Username is not provided!',
     });
