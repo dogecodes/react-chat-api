@@ -12,7 +12,7 @@ function signUp(username, password) {
     });
   }
 
-  return User.findOne({ username: username.toLowerCase() })
+  return User.findOne({ username })
     .exec()
     .then((user) => {
       if (user) {
@@ -55,7 +55,7 @@ function login(username, password) {
     });
   }
 
-  return User.findOne({ username: username.toLowerCase() })
+  return User.findOne({ username })
     .exec()
     .then((user) => {
       if (!user) {
