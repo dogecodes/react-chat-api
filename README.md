@@ -45,7 +45,7 @@ Here's the map of API's HTTP routes:
     * `/signup` **POST** — create new user with `username` and `password`.
     * `/login` **POST** — log user in with `username` and `password`.
     * `/logout` **GET** — log out active user.
-    * `/check-user?query=john` **POST** — check, whether username is already taken.
+    * `/check-user?query=john` **GET** — check, whether username is already taken.
 * `/users` — routes related to users.
     * `/users` **GET** — retrieve data about all users.
     * `/users/me` **GET** — retrieve my user's data.
