@@ -41,10 +41,11 @@ http://localhost:8000/v1/chats
 
 Here's the map of API's HTTP routes:
 
-* `/` — routes related to authentication. 
+* `/` — routes related to authentication.
     * `/signup` **POST** — create new user with `username` and `password`.
     * `/login` **POST** — log user in with `username` and `password`.
     * `/logout` **GET** — log out active user.
+    * `/check-user?query=john` **POST** — check, whether username is already taken.
 * `/users` — routes related to users.
     * `/users` **GET** — retrieve data about all users.
     * `/users/me` **GET** — retrieve my user's data.

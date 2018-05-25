@@ -1,4 +1,3 @@
-const url = require('url');
 const { Router } = require('express');
 const authConroller = require('../controllers/auth');
 
@@ -69,7 +68,7 @@ authRouter.get('/logout', (req, res, next) => {
 });
 
 authRouter.get('/check-user', (req, res, next) => {
-  const { query } = url.parse(req.url, true).query;
+  const { query } = req.query;
   authConroller
     .checkUser(query)
     .then((result) => {
