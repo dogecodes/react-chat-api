@@ -102,8 +102,31 @@ function logout() {
   });
 }
 
+function checkUser(username) {
+  if (!username) {
+    return Promise.reject({
+      success: false,
+      message: 'Username is not provided',
+    });
+  }
+  return User.findOne({ username: username.toLowerCase() })
+    .exec()
+    .then((user) => {
+      if (user) {
+        return Promise.reject({
+          success: false,
+          message: 'Username is already taken',
+        });
+      }
+      return Promise.resolve({
+        success: true,
+      });
+    });
+}
+
 module.exports = {
   signUp,
   login,
   logout,
+  checkUser,
 };

@@ -1,3 +1,4 @@
+const url = require('url');
 const { Router } = require('express');
 const authConroller = require('../controllers/auth');
 
@@ -56,6 +57,24 @@ authRouter.get('/logout', (req, res, next) => {
       res.json({
         success: result.success,
         message: result.message,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: error.message,
+      });
+      next(error);
+    });
+});
+
+authRouter.get('/check-user', (req, res, next) => {
+  const { query } = url.parse(req.url, true).query;
+  authConroller
+    .checkUser(query)
+    .then((result) => {
+      res.json({
+        success: result.success,
       });
     })
     .catch((error) => {
