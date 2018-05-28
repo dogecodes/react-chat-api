@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { JWT_SECRET } = require('../config');
-const userContoller = require('./users');
+const userController = require('./users');
 
 // Sign up new user by username and password
 function signUp(username, password) {
@@ -29,7 +29,7 @@ function signUp(username, password) {
 
       return newUser.save();
     })
-    .then(savedUser => userContoller.getUserById(savedUser._id))
+    .then(savedUser => userController.getUserById(savedUser._id))
     .then(({ user }) => {
       const token = jwt.sign(
         { userId: user._id },
@@ -76,7 +76,7 @@ function login(username, password) {
       }
       return user;
     })
-    .then(savedUser => userContoller.getUserById(savedUser._id))
+    .then(savedUser => userController.getUserById(savedUser._id))
     .then(({ user }) => {
       const token = jwt.sign(
         { userId: user._id },
