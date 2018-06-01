@@ -67,10 +67,10 @@ authRouter.get('/logout', (req, res, next) => {
     });
 });
 
-authRouter.get('/check-user', (req, res, next) => {
-  const { query } = req.query;
+authRouter.get('/user-exists', (req, res, next) => {
+  const { username } = req.query;
   authConroller
-    .checkUser(query)
+    .userExists(username)
     .then((result) => {
       res.json({
         success: result.success,

@@ -102,14 +102,14 @@ function logout() {
   });
 }
 
-function checkUser(username) {
+function userExists(username) {
   if (!username) {
     return Promise.reject({
       success: false,
       message: 'Username is not provided',
     });
   }
-  return User.findOne({ username: username.toLowerCase() })
+  return User.findOne({ username })
     .exec()
     .then((user) => {
       if (user) {
@@ -128,5 +128,5 @@ module.exports = {
   signUp,
   login,
   logout,
-  checkUser,
+  userExists,
 };
