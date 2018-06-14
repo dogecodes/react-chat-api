@@ -168,7 +168,7 @@ function getChat(userId, chatId) {
     });
 }
 
-function newChat(userId, data) {
+function newChat(userId, data = {}) {
   const chat = new Chat({
     creator: userId,
     title: data.title,
