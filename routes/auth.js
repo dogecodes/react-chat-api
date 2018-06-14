@@ -67,4 +67,22 @@ authRouter.get('/logout', (req, res, next) => {
     });
 });
 
+authRouter.get('/user-exists', (req, res, next) => {
+  const { username } = req.query;
+  authConroller
+    .userExists(username)
+    .then((result) => {
+      res.json({
+        success: result.success,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        success: false,
+        message: error.message,
+      });
+      next(error);
+    });
+});
+
 module.exports = authRouter;
