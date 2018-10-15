@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     lastName: { type: String, default: '' },
     lastVisit: Date,
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 // Password hash middleware.
@@ -35,7 +35,9 @@ userSchema.pre('save', function checkPassword(next) {
 });
 
 // Helper method for validating user's password.
-userSchema.methods.comparePassword = function comparePassword(candidatePassword) {
+userSchema.methods.comparePassword = function comparePassword(
+  candidatePassword
+) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
       if (err) {
