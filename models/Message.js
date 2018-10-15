@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ignoreEmpty = val => (val !== '' ? val : undefined);
+const ignoreEmpty = (val) => (val !== '' ? val : undefined);
 
 const messageSchema = new mongoose.Schema(
   {
@@ -16,7 +16,7 @@ const messageSchema = new mongoose.Schema(
     content: String,
     statusMessage: Boolean,
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 module.exports = mongoose.model('Message', messageSchema);

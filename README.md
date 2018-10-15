@@ -12,8 +12,8 @@ This is a simple API server that implements a logic required to correct work of 
 
 To run this server localy you need to have these requirements:
 
-* [Node.js](https://nodejs.org)
-* [MongoDB](https://www.mongodb.com/download-center#community)
+- [Node.js](https://nodejs.org)
+- [MongoDB](https://www.mongodb.com/download-center#community)
 
 ## Installations
 
@@ -41,24 +41,24 @@ http://localhost:8000/v1/chats
 
 Here's the map of API's HTTP routes:
 
-* `/` — routes related to authentication. 
-    * `/signup` **POST** — create new user with `username` and `password`.
-    * `/login` **POST** — log user in with `username` and `password`.
-    * `/logout` **GET** — log out active user.
-* `/users` — routes related to users.
-    * `/users` **GET** — retrieve data about all users.
-    * `/users/me` **GET** — retrieve my user's data.
-    * `/users/me` **POST** — update my user's information (`username`, `firstName`, `lastName` and `city`).
-    * `/users/:id` **GET** — retrieve information about user with specific `:id`.
-* `/chats` — routes related to chats.
-    * `/chats` **GET** — retrieve information about all chats.
-    * `/chats` **POST** — create new chat with specified `title`.
-    * `/chats/my` **GET** — get list of all user's chats.
-    * `/chats/:id` **GET** — get chat's information with messages by specific chat's `:id`.
-    * `/chats/:id` **POST** — send new message to chat with specific `:id`.
-    * `/chast/:id` **DELETE** — delete chat with specific `:id`. Only creator of the chat can delete it.
-    * `/chats/:id/join` **GET** — join chat with specific `:id`.
-    * `/chats/:id/leave` **GET** — leave chat with specific `:id`.
+- `/` — routes related to authentication.
+  - `/signup` **POST** — create new user with `username` and `password`.
+  - `/login` **POST** — log user in with `username` and `password`.
+  - `/logout` **GET** — log out active user.
+- `/users` — routes related to users.
+  - `/users` **GET** — retrieve data about all users.
+  - `/users/me` **GET** — retrieve my user's data.
+  - `/users/me` **POST** — update my user's information (`username`, `firstName`, `lastName` and `city`).
+  - `/users/:id` **GET** — retrieve information about user with specific `:id`.
+- `/chats` — routes related to chats.
+  - `/chats` **GET** — retrieve information about all chats.
+  - `/chats` **POST** — create new chat with specified `title`.
+  - `/chats/my` **GET** — get list of all user's chats.
+  - `/chats/:id` **GET** — get chat's information with messages by specific chat's `:id`.
+  - `/chats/:id` **POST** — send new message to chat with specific `:id`.
+  - `/chast/:id` **DELETE** — delete chat with specific `:id`. Only creator of the chat can delete it.
+  - `/chats/:id/join` **GET** — join chat with specific `:id`.
+  - `/chats/:id/leave` **GET** — leave chat with specific `:id`.
 
 If you're using [Insomnia](https://insomnia.rest/) for debugging APIs, you can download a workspace backup:
 
@@ -75,8 +75,8 @@ import SocketIOClient from 'socket.io-client';
 
 socket = SocketIOClient('path/to/api', {
   query: {
-    token: '...your access-token here...'
-  }
+    token: '...your access-token here...',
+  },
 });
 ```
 
@@ -84,16 +84,16 @@ Here's the list of events:
 
 #### Emmiting
 
-* `new-message` — emmited when someone sends new message to specific chat.
-* `new-chat` — emmited when someone creates new chat.
-* `deleted-chat` — emmited when someone deletes a chat.
+- `new-message` — emmited when someone sends new message to specific chat.
+- `new-chat` — emmited when someone creates new chat.
+- `deleted-chat` — emmited when someone deletes a chat.
 
 #### Listening
 
-* `connection` — connection of socket.io client.
-* `mount-chat` — mount a client to listen for messages in chat with specific `:chatId`.
-* `unmount-chat` — unmout a client from listening for messages in chat with specific `:chatId`.
-* `send-message` — send message with `content` to chat with 
+- `connection` — connection of socket.io client.
+- `mount-chat` — mount a client to listen for messages in chat with specific `:chatId`.
+- `unmount-chat` — unmout a client from listening for messages in chat with specific `:chatId`.
+- `send-message` — send message with `content` to chat with
 
 ## License
 

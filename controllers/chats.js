@@ -8,11 +8,12 @@ function getAllChats() {
     .populate({ path: 'members', select: 'username firstName lastName' })
     .lean()
     .exec()
-    .then(chats =>
+    .then((chats) =>
       Promise.resolve({
         success: true,
         chats,
-      }));
+      })
+    );
 }
 
 function getMyChats(userId) {
@@ -23,11 +24,12 @@ function getMyChats(userId) {
     .populate({ path: 'members', select: 'username firstName lastName' })
     .lean()
     .exec()
-    .then(chats =>
+    .then((chats) =>
       Promise.resolve({
         success: true,
         chats,
-      }));
+      })
+    );
 }
 
 function joinChat(userId, chatId) {
@@ -45,7 +47,9 @@ function joinChat(userId, chatId) {
       }
 
       const isCreator = chat.creator._id.toString() === userId;
-      const isMember = chat.members.some(member => member._id.toString() === userId);
+      const isMember = chat.members.some(
+        (member) => member._id.toString() === userId
+      );
 
       if (isCreator || isMember) {
         return Promise.reject({
@@ -63,7 +67,7 @@ function joinChat(userId, chatId) {
         },
         {
           new: true,
-        },
+        }
       )
         .populate({ path: 'creator', select: 'username firstName lastName' })
         .populate({ path: 'members', select: 'username firstName lastName' })
@@ -83,7 +87,8 @@ function joinChat(userId, chatId) {
         success: statusMessage.success,
         message: statusMessage.message,
         chat,
-      }));
+      })
+    );
 }
 
 function leaveChat(userId, chatId) {
@@ -101,12 +106,15 @@ function leaveChat(userId, chatId) {
       }
 
       const isCreator = chat.creator._id.toString() === userId;
-      const isMember = chat.members.some(member => member._id.toString() === userId);
+      const isMember = chat.members.some(
+        (member) => member._id.toString() === userId
+      );
 
       if (isCreator) {
         return Promise.reject({
           success: false,
-          message: 'You cannot delete your own chat! You can only delete you own chats.',
+          message:
+            'You cannot delete your own chat! You can only delete you own chats.',
         });
       }
 
@@ -124,7 +132,7 @@ function leaveChat(userId, chatId) {
         },
         {
           new: true,
-        },
+        }
       )
         .populate({ path: 'creator', select: 'username firstName lastName' })
         .populate({ path: 'members', select: 'username firstName lastName' })
@@ -144,7 +152,8 @@ function leaveChat(userId, chatId) {
         success: statusMessage.success,
         message: statusMessage.message,
         chat,
-      }));
+      })
+    );
 }
 
 function getChat(userId, chatId) {
@@ -178,18 +187,20 @@ function newChat(userId, data = {}) {
 
   return chat
     .save()
-    .then(createdChat =>
+    .then((createdChat) =>
       Chat.findById(createdChat._id)
         .populate({ path: 'creator', select: 'username firstName lastName' })
         .populate({ path: 'members', select: 'username firstName lastName' })
         .lean()
-        .exec())
-    .then(createdChat =>
+        .exec()
+    )
+    .then((createdChat) =>
       Promise.resolve({
         success: true,
         message: 'Chat has been created',
         chat: createdChat,
-      }));
+      })
+    );
 }
 
 function deleteChat(userId, chatId) {
@@ -212,7 +223,8 @@ function deleteChat(userId, chatId) {
       Promise.resolve({
         success: true,
         message: 'Chat deleted!',
-      }));
+      })
+    );
 }
 
 module.exports = {

@@ -7,12 +7,13 @@ function getAllUsers(exceptId) {
   return User.find({ _id: { $ne: exceptId } })
     .select('username firstName lastName')
     .exec()
-    .then(users =>
+    .then((users) =>
       Promise.resolve({
         success: true,
         message: 'Users has been found',
         users,
-      }));
+      })
+    );
 }
 
 // Get profile data for specific user by id
@@ -31,7 +32,7 @@ function getUserChats(userId) {
     .sort({ createdAt: -1 })
     .lean()
     .exec()
-    .then(chats => chats || []);
+    .then((chats) => chats || []);
 }
 
 // Count the amount of messages by specific user
@@ -39,12 +40,16 @@ function countUserMessages(userId) {
   return Message.find({ sender: userId, statusMessage: false })
     .count()
     .exec()
-    .then(count => count || 0);
+    .then((count) => count || 0);
 }
 
 // Get User data by specific id
 function getUserById(userId) {
-  const userPromises = [getUserData(userId), getUserChats(userId), countUserMessages(userId)];
+  const userPromises = [
+    getUserData(userId),
+    getUserChats(userId),
+    countUserMessages(userId),
+  ];
 
   return Promise.all(userPromises).then(([user, chats, messagesCount]) => {
     if (!user) {
@@ -94,8 +99,9 @@ function editUser(userId, data) {
         },
         {
           new: true,
-        },
-      ).select('username firstName lastName'))
+        }
+      ).select('username firstName lastName')
+    )
     .then((user) => {
       if (!user) {
         return Promise.reject({

@@ -2,6 +2,14 @@
   "name": "dogecodes-chat-server",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "forever index.js",
+    "start:dev": "forever --watch index.js",
+    "lint": "eslint **/*.js",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write **/*.{js,json,md}",
+    "precommit": "lint-staged"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
@@ -12,21 +20,15 @@
     "mongoose": "^4.13.10",
     "socket.io": "^2.0.4"
   },
-  "scripts": {
-    "start": "forever index.js",
-    "start:dev": "forever --watch index.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "npm run lint -- --fix",
-    "format": "prettier-eslint --write **/*.js",
-    "precommit": "lint-staged"
-  },
   "devDependencies": {
     "eslint": "^4.17.0",
     "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-prettier": "^3.0.0",
     "husky": "^0.14.3",
     "lint-staged": "^6.1.0",
-    "prettier-eslint-cli": "^4.7.0"
+    "prettier": "^1.14.3"
   },
   "lint-staged": {
     "*.js": [

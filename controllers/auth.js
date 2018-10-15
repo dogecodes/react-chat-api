@@ -29,12 +29,12 @@ function signUp(username, password) {
 
       return newUser.save();
     })
-    .then(savedUser => userController.getUserById(savedUser._id))
+    .then((savedUser) => userController.getUserById(savedUser._id))
     .then(({ user }) => {
       const token = jwt.sign(
         { userId: user._id },
         JWT_SECRET,
-        { expiresIn: 60 * 60 * 24 * 10 }, // 10 days
+        { expiresIn: 60 * 60 * 24 * 10 } // 10 days
       );
 
       return Promise.resolve({
@@ -65,7 +65,10 @@ function login(username, password) {
         });
       }
 
-      return Promise.all([Promise.resolve(user), user.comparePassword(password)]);
+      return Promise.all([
+        Promise.resolve(user),
+        user.comparePassword(password),
+      ]);
     })
     .then(([user, isPasswordMatch]) => {
       if (!isPasswordMatch) {
@@ -76,12 +79,12 @@ function login(username, password) {
       }
       return user;
     })
-    .then(savedUser => userController.getUserById(savedUser._id))
+    .then((savedUser) => userController.getUserById(savedUser._id))
     .then(({ user }) => {
       const token = jwt.sign(
         { userId: user._id },
         JWT_SECRET,
-        { expiresIn: 60 * 60 * 24 * 10 }, // 10 days
+        { expiresIn: 60 * 60 * 24 * 10 } // 10 days
       );
 
       return Promise.resolve({
