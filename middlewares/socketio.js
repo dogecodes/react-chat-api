@@ -35,12 +35,15 @@ function socketio(io) {
       socket.leave(chatId);
     });
 
-    socket.on('send-message', (newMessage) => {
+    socket.on('send-message', (newMessage, fn) => {
       const { chatId, content } = newMessage;
-
       return sendMessage(socket.decoded.userId, chatId, { content })
         .then(({ success, message }) => {
           io.to(chatId).emit('new-message', {
+            success,
+            message,
+          });
+          fn({
             success,
             message,
           });
