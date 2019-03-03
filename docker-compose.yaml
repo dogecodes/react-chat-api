@@ -1,0 +1,26 @@
+
+version: "3.3"
+
+services:
+  mongo:
+    image: mongo:3.6.0
+    ports:
+      - "0:27017"
+      - "0:28017"
+    volumes:
+      - ./data/db:/data/db
+
+  server:
+    build: .
+    image: doge/react-chat-api:latest
+    links:
+      - mongo
+    ports:
+      - "8001:8000"
+    environment:
+      - MT_PORT=8000
+      - MONGODB_URI=mongodb://mongo/dogecodes-chat-app
+      - NODE_ENV=development
+    command: sh -c './wait-for.sh mongo:27017 -- npm start'
+    depends_on:
+      - mongo
